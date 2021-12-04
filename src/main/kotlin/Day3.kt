@@ -4,26 +4,15 @@ class Day3(private val report: List<String>) {
     constructor() : this(Input("day3.txt").lines())
 
     fun part1(): Int {
-        val indices = report.minByOrNull { it.length }?.indices ?: error("invalid input")
-        val gamma = indices.map { index ->
-            report.map { line -> line[index] }
-                .groupingBy { it }
-                .eachCount()
-                .maxByOrNull { it.value }
-                ?.key ?: error("invalid input")
+        val count = report.first().indices.map { i ->
+            report.map { line -> line[i] }.groupingBy { char -> char }.eachCount()
         }
-            .joinToString(separator = "")
-            .toInt(2)
 
-        val epsilon = indices.map { index ->
-            report.map { line -> line[index] }
-                .groupingBy { it }
-                .eachCount()
-                .minByOrNull { it.value }
-                ?.key ?: error("invalid input")
-        }
-            .joinToString(separator = "")
-            .toInt(2)
+        val gamma = count.map { it.maxByOrNull { (_, count) -> count }?.key ?: error("invalid input") }
+            .joinToString(separator = "").toInt(2)
+
+        val epsilon = count.map { it.minByOrNull { (_, count) -> count }?.key ?: error("invalid input") }
+            .joinToString(separator = "").toInt(2)
 
         return gamma * epsilon
     }
