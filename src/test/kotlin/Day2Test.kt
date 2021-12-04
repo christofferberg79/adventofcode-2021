@@ -12,17 +12,16 @@ class Day2Test {
         "down 8",
         "forward 2"
     )
-    private val realInput = Input.readLines("day2.txt")
 
     @Test
     fun part1_Example() {
-        val result = Day2().part1(exampleInput)
+        val result = Day2(exampleInput).part1()
         assertEquals(150, result)
     }
 
     @Test
     fun part1_RealInput() {
-        val result = Day2().part1(realInput)
+        val result = Day2().part1()
         assertEquals(1604850, result)
     }
 }

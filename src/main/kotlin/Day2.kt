@@ -1,11 +1,12 @@
 package cberg.aoc2021
 
-class Day2 {
-    fun part1(commands: List<String>): Int {
+class Day2(private val commands: List<String>) {
+    constructor() : this(Input("day2.txt").lines())
+
+    fun part1(): Int {
         val finalPosition = commands.fold(Position()) { pos, command -> pos + command }
         return finalPosition.horizontal * finalPosition.depth
     }
-
 }
 
 private operator fun Position.plus(command: String): Position {
