@@ -3,8 +3,9 @@ package cberg.aoc2021
 import java.io.File
 
 fun main() {
-    val result = Day1().part1(readIntLines("day1.txt"))
-    println("Day 1, part 1: $result")
+    val day1Input = readIntLines("day1.txt")
+    println("Day 1, part 1: ${Day1().part1(day1Input)}")
+    println("Day 1, part 2: ${Day1().part2(day1Input)}")
 }
 
 fun readIntLines(filename: String): List<Int> {
