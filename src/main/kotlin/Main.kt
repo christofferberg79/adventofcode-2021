@@ -1,7 +1,12 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+package cberg.aoc2021
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+import java.io.File
+
+fun main() {
+    val result = Day1().part1(readIntLines("day1.txt"))
+    println("Day 1, part 1: $result")
+}
+
+fun readIntLines(filename: String): List<Int> {
+    return File("input/$filename").readLines().map { it.toInt() }
 }
