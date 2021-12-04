@@ -16,4 +16,40 @@ class Day3(private val report: List<String>) {
 
         return gamma * epsilon
     }
+
+    fun part2(): Int {
+        val indices = report.first().indices
+
+        var work = report
+        for (i in indices) {
+            val count = indices.map { i ->
+                work.map { line -> line[i] }.groupingBy { char -> char }.eachCount()
+            }
+            val ones = count[i].getOrDefault('1', 0)
+            val zeros = count[i].getOrDefault('0', 0)
+            val filterValue = if (ones >= zeros) '1' else '0'
+            work = work.filter { line -> line[i] == filterValue }
+            if (work.size == 1) {
+                break
+            }
+        }
+        val ogr = work.first().toInt(2)
+
+        work = report
+        for (i in indices) {
+            val count = indices.map { i ->
+                work.map { line -> line[i] }.groupingBy { char -> char }.eachCount()
+            }
+            val ones = count[i].getOrDefault('1', 0)
+            val zeros = count[i].getOrDefault('0', 0)
+            val filterValue = if (ones >= zeros) '0' else '1'
+            work = work.filter { line -> line[i] == filterValue }
+            if (work.size == 1) {
+                break
+            }
+        }
+        val csr = work.first().toInt(2)
+
+        return ogr * csr
+    }
 }
