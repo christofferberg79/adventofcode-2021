@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 
 class Day1Test {
     private val exampleInput = listOf(199, 200, 208, 210, 200, 207, 240, 269, 260, 263)
-    private val realInput = readIntLines("day1.txt")
+    private val realInput = Input.readIntLines("day1.txt")
 
     @Test
     fun part1_Example() {
