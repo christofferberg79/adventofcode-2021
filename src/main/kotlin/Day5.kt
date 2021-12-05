@@ -1,7 +1,6 @@
 package cberg.aoc2021
 
-import kotlin.math.max
-import kotlin.math.min
+import kotlin.math.sign
 
 class Day5(input: List<String>) {
     constructor() : this(Input("day5.txt").lines())
@@ -10,12 +9,11 @@ class Day5(input: List<String>) {
 
     fun part1() = lines
         .filter { line -> line.isHorizontal() || line.isVertical() }
-        .flatMap { line -> line.points }
-        .groupingBy { point -> point }.eachCount()
-        .count { (_, count) -> count >= 2 }
+        .countOverlaps()
 
-    fun part2() = lines
-        .flatMap { line -> line.points }
+    fun part2() = lines.countOverlaps()
+
+    private fun List<Line>.countOverlaps() = flatMap { line -> line.points }
         .groupingBy { point -> point }.eachCount()
         .count { (_, count) -> count >= 2 }
 }
@@ -26,21 +24,15 @@ private data class Line(val p1: Point, val p2: Point)
 private fun Line.isHorizontal() = p1.y == p2.y
 private fun Line.isVertical() = p1.x == p2.x
 
-private val Line.points: List<Point>
-    get() = when {
-        isHorizontal() -> (min(p1.x, p2.x)..max(p1.x, p2.x)).map { x -> Point(x, p1.y) }
-        isVertical() -> (min(p1.y, p2.y)..max(p1.y, p2.y)).map { y -> Point(p1.x, y) }
-        else -> {
-            val dp = Point(
-                x = (p2.x - p1.x).coerceIn(-1..1),
-                y = (p2.y - p1.y).coerceIn(-1..1)
-            )
-            generateSequence(p1) { p ->
-                if (p == p2) null
-                else Point(p.x + dp.x, p.y + dp.y)
-            }.toList()
-        }
-    }
+private val Line.points
+    get() = generateSequence(p1) { p -> if (p == p2) null else p + direction }
+
+private val Line.direction
+    get() = (p2 - p1).sign
+
+private operator fun Point.plus(other: Point) = Point(x + other.x, y + other.y)
+private operator fun Point.minus(other: Point) = Point(x - other.x, y - other.y)
+private val Point.sign get() = Point(x.sign, y.sign)
 
 private fun Line(s: String): Line {
     val (p1, p2) = s.split(" -> ").map { Point(it) }
