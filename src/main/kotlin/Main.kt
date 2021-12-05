@@ -7,4 +7,5 @@ fun main() {
     println("Day 2, part 2: ${Day2().part2()}")
     println("Day 3, part 1: ${Day3().part1()}")
     println("Day 3, part 2: ${Day3().part2()}")
+    println("Day 4, part 1: ${Day4().part1()}")
 }
