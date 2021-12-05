@@ -1,0 +1,43 @@
+package cberg.aoc2021
+
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
+class Day5Test {
+    private val exampleInput = listOf(
+        "0,9 -> 5,9",
+        "8,0 -> 0,8",
+        "9,4 -> 3,4",
+        "2,2 -> 2,1",
+        "7,0 -> 7,4",
+        "6,4 -> 2,0",
+        "0,9 -> 2,9",
+        "3,4 -> 1,4",
+        "0,0 -> 8,8",
+        "5,5 -> 8,2"
+    )
+
+    @Test
+    fun part1_Example() {
+        val result = Day5(exampleInput).part1()
+        assertEquals(5, result)
+    }
+
+    @Test
+    fun part1_RealInput() {
+        val result = Day5().part1()
+        assertEquals(6397, result)
+    }
+
+//    @Test
+//    fun part2_Example() {
+//        val result = Day5(exampleInput).part2()
+//        assertEquals(-1, result)
+//    }
+//
+//    @Test
+//    fun part2_RealInput() {
+//        val result = Day5().part2()
+//        assertEquals(-1, result)
+//    }
+}
