@@ -19,7 +19,16 @@ class Day4(input: List<String>) {
     }
 
     fun part2(): Int {
-        TODO("Not yet implemented")
+        numbers.fold(boards) { boardsLeft, number ->
+            boardsLeft.forEach { board -> board.mark(number) }
+            boardsLeft.singleOrNull()?.let { board ->
+                if (board.hasWon()) {
+                    return board.calculateScore(number)
+                }
+            }
+            boardsLeft.filter { board -> !board.hasWon() }
+        }
+        error("No winner")
     }
 
 }
