@@ -14,9 +14,10 @@ class Day5(input: List<String>) {
         .groupingBy { point -> point }.eachCount()
         .count { (_, count) -> count >= 2 }
 
-    fun part2(): Int {
-        TODO("Not yet implemented")
-    }
+    fun part2() = lines
+        .flatMap { line -> line.points }
+        .groupingBy { point -> point }.eachCount()
+        .count { (_, count) -> count >= 2 }
 }
 
 private data class Point(val x: Int, val y: Int)
@@ -29,7 +30,16 @@ private val Line.points: List<Point>
     get() = when {
         isHorizontal() -> (min(p1.x, p2.x)..max(p1.x, p2.x)).map { x -> Point(x, p1.y) }
         isVertical() -> (min(p1.y, p2.y)..max(p1.y, p2.y)).map { y -> Point(p1.x, y) }
-        else -> error("unsupported method for this line")
+        else -> {
+            val dp = Point(
+                x = (p2.x - p1.x).coerceIn(-1..1),
+                y = (p2.y - p1.y).coerceIn(-1..1)
+            )
+            generateSequence(p1) { p ->
+                if (p == p2) null
+                else Point(p.x + dp.x, p.y + dp.y)
+            }.toList()
+        }
     }
 
 private fun Line(s: String): Line {

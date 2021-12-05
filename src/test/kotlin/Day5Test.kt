@@ -29,15 +29,15 @@ class Day5Test {
         assertEquals(6397, result)
     }
 
-//    @Test
-//    fun part2_Example() {
-//        val result = Day5(exampleInput).part2()
-//        assertEquals(-1, result)
-//    }
-//
-//    @Test
-//    fun part2_RealInput() {
-//        val result = Day5().part2()
-//        assertEquals(-1, result)
-//    }
+    @Test
+    fun part2_Example() {
+        val result = Day5(exampleInput).part2()
+        assertEquals(12, result)
+    }
+
+    @Test
+    fun part2_RealInput() {
+        val result = Day5().part2()
+        assertEquals(22335, result)
+    }
 }
