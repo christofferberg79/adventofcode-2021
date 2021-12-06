@@ -2,7 +2,10 @@ package cberg.aoc2021
 
 import java.io.File
 
-class Input(private val filename: String) {
-    fun lines() = File("input/$filename").readLines()
+class Input(filename: String) {
+    private val file = File("input/$filename")
+
+    fun oneLine() = lines().first()
+    fun lines() = file.readLines()
     fun intLines() = lines().map { it.toInt() }
 }
