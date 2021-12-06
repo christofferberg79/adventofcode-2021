@@ -12,4 +12,5 @@ fun main() {
     println("Day 5, part 1: ${Day5().part1()}")
     println("Day 5, part 2: ${Day5().part2()}")
     println("Day 6, part 1: ${Day6().part1(80)}")
+    println("Day 6, part 2: ${Day6().part2(256)}")
 }

@@ -16,5 +16,25 @@ class Day6(input: String) {
         }.elementAt(days).size
     }
 
-    fun part2() = 0
+    fun part2(days: Int): Long {
+        val initialCount: Map<Int, Long> = state
+            .groupingBy { daysUntilNew -> daysUntilNew }
+            .eachCount()
+            .mapValues { numberOfFish -> numberOfFish.value.toLong() }
+        return generateSequence(initialCount) { count ->
+            val newCount = mutableMapOf<Int, Long>()
+
+            for ((daysUntilNew, numberOfFish) in count) {
+                when (daysUntilNew) {
+                    0 -> {
+                        newCount[8] = numberOfFish
+                        newCount.merge(6, numberOfFish, Long::plus)
+                    }
+                    else -> newCount.merge(daysUntilNew - 1, numberOfFish, Long::plus)
+                }
+            }
+            newCount
+        }.elementAt(days).values.sum()
+    }
+
 }
