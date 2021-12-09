@@ -1,50 +1,53 @@
 package cberg.aoc2021
 
-class Day9(private val input: List<String>) {
+class Day9(input: List<String>) {
     constructor() : this(Input("day9.txt").lines())
 
-    fun part1() = getLowPoints().sumOf { (row, col) -> 1 + getHeight(row, col) }
+    private val heightmap = input.map { s -> s.map { c -> c.digitToInt() } }
+    private val maxRow = heightmap.lastIndex
+    private val maxCol = heightmap.first().lastIndex
 
-    private fun getLowPoints() = input.indices.flatMap { row ->
-        input.first().indices
-            .filter { col -> isLowPoint(row, col) }
-            .map { col -> row to col }
+    fun part1() = getLowPoints().sumOf { 1 + it.getHeight() }
+
+    private fun getLowPoints() = getLocations().filter { it.isLowPoint() }
+
+    private fun getLocations() = (0..maxRow).flatMap { row ->
+        (0..maxCol).map { col -> Location(row, col) }
     }
 
-    private fun isLowPoint(row: Int, col: Int): Boolean {
-        return getAdjacentLocations(row, col).all { location ->
-            getHeight(location.first, location.second) > getHeight(row, col)
-        }
+    private fun Location.isLowPoint() = getAdjacentLocations().all { adjacent ->
+        this.getHeight() < adjacent.getHeight()
     }
 
-    private fun getAdjacentLocations(row: Int, col: Int) = buildList {
-        if (row > 0) add(row - 1 to col)
-        if (row < input.lastIndex) add(row + 1 to col)
-        if (col > 0) add(row to col - 1)
-        if (col < input.first().lastIndex) add(row to col + 1)
+    private fun Location.getAdjacentLocations() = buildList {
+        if (row > 0) add(Location(row - 1, col))
+        if (row < maxRow) add(Location(row + 1, col))
+        if (col > 0) add(Location(row, col - 1))
+        if (col < maxCol) add(Location(row, col + 1))
     }
 
-    private fun getHeight(row: Int, col: Int) = input[row][col].digitToInt()
+    private fun Location.getHeight() = heightmap[row][col]
 
     fun part2() = getLowPoints().asSequence()
-        .map { (row, col) -> getBasin(row, col) }
-        .map { basin -> basin.size }
+        .map { location -> getBasin(location).size }
         .sortedDescending()
         .take(3)
-        .reduce(Int::times)
+        .reduce { acc, size -> acc * size }
 
-    private fun getBasin(row: Int, col: Int): Set<Pair<Int, Int>> {
-        val basin = mutableSetOf(row to col)
-        val locationsToProcess = mutableListOf(row to col)
+    private fun getBasin(lowPoint: Location): Set<Location> {
+        val basin = mutableSetOf(lowPoint)
+        val locationsToProcess = mutableListOf(lowPoint)
         while (locationsToProcess.isNotEmpty()) {
-            val location = locationsToProcess.removeFirst()
-            val adjacentLocations = getAdjacentLocations(location.first, location.second)
-                .filter { it !in basin }
-                .filter { getHeight(it.first, it.second) < 9 }
-                .filter { getHeight(it.first, it.second) >= getHeight(location.first, location.second) }
-            basin.addAll(adjacentLocations)
-            locationsToProcess.addAll(adjacentLocations)
+            locationsToProcess.removeFirst()
+                .getAdjacentLocations()
+                .filter { adjacent -> adjacent !in basin && adjacent.getHeight() < 9 }
+                .forEach { adjacent ->
+                    basin.add(adjacent)
+                    locationsToProcess.add(adjacent)
+                }
         }
         return basin
     }
 }
+
+private data class Location(val row: Int, val col: Int)
