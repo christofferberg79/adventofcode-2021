@@ -5,36 +5,18 @@ class Day6(input: String) {
 
     private val state = input.split(",").map { it.toInt() }
 
-    fun part1(days: Int): Int {
-        return generateSequence(state) { state ->
-            state.flatMap { daysUntilNew ->
-                when (daysUntilNew) {
-                    0 -> listOf(6, 8)
-                    else -> listOf(daysUntilNew - 1)
-                }
-            }
-        }.elementAt(days).size
-    }
+    fun part1(days: Int) = solve(days).toInt()
 
-    fun part2(days: Int): Long {
-        val initialCount: Map<Int, Long> = state
-            .groupingBy { daysUntilNew -> daysUntilNew }
-            .eachCount()
-            .mapValues { numberOfFish -> numberOfFish.value.toLong() }
-        return generateSequence(initialCount) { count ->
-            val newCount = mutableMapOf<Int, Long>()
+    fun part2(days: Int) = solve(days)
 
-            for ((daysUntilNew, numberOfFish) in count) {
-                when (daysUntilNew) {
-                    0 -> {
-                        newCount[8] = numberOfFish
-                        newCount.merge(6, numberOfFish, Long::plus)
-                    }
-                    else -> newCount.merge(daysUntilNew - 1, numberOfFish, Long::plus)
-                }
-            }
-            newCount
-        }.elementAt(days).values.sum()
-    }
+    private fun solve(days: Int) = generateSequence(initialCount()) { previousCount ->
+        previousCount.mapKeys { (daysUntilNew, _) -> if (daysUntilNew == 0) 8 else daysUntilNew - 1 }
+            .toMutableMap().apply { merge(6, previousCount[0] ?: 0, Long::plus) }
+    }.elementAt(days).values.sum()
+
+    private fun initialCount() = state
+        .groupingBy { daysUntilNew -> daysUntilNew }
+        .eachCount()
+        .mapValues { (_, numberOfFish) -> numberOfFish.toLong() }
 
 }
