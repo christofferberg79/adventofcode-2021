@@ -24,10 +24,11 @@ fun main() {
     run(8, 2) { Day8().part2() }
     run(9, 1) { Day9().part1() }
     run(9, 2) { Day9().part2() }
+    run(10, 1) { Day10().part1() }
 }
 
 @OptIn(ExperimentalTime::class)
 private fun run(day: Int, part: Int, block: () -> Any) {
     val result = measureTimedValue(block)
-    println("Day %s, part %s    %-15s %6s ms".format(day, part, result.value, result.duration.inWholeMilliseconds))
+    println("Day %2s, part %s    %-15s %6s ms".format(day, part, result.value, result.duration.inWholeMilliseconds))
 }
