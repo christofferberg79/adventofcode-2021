@@ -1,6 +1,6 @@
 package cberg.aoc2021
 
-class DayX(input: List<String>) {
+class DayX(private val input: List<String>) {
     constructor() : this(Input("dayX.txt").lines())
 
     fun part1() = 0
