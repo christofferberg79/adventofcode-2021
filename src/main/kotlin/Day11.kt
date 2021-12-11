@@ -5,36 +5,31 @@ class Day11(input: List<String>) {
 
     private val data = input.map { line -> line.map { it.digitToInt() }.toMutableList() }
 
-    fun part1(): Int {
+    fun part1() = (1..100).sumOf { step() }
+
+    fun part2() = generateSequence { step() }.takeWhile { it < 100 }.count() + 1
+
+    private fun step(): Int {
         var flashes = 0
-        repeat(100) {
-            val toFlash = mutableListOf<P>()
-            for (x in 0..9) for (y in 0..9) {
-                data[x][y]++
-                if (data[x][y] == 10) {
-                    toFlash += P(x, y)
-                }
-            }
-            while (toFlash.isNotEmpty()) {
+        val toIncrease = mutableListOf<P>()
+
+        for (x in 0..9) for (y in 0..9) {
+            toIncrease += P(x, y)
+        }
+        while (toIncrease.isNotEmpty()) {
+            val p = toIncrease.removeFirst()
+            if (++data[p.x][p.y] == 10) {
                 flashes++
-                val p0 = toFlash.removeFirst()
-                for (p in p0.adjacent) {
-                    data[p.x][p.y]++
-                    if (data[p.x][p.y] == 10) {
-                        toFlash.add(p)
-                    }
-                }
+                toIncrease += p.adjacent
             }
-            for (x in 0..9) for (y in 0..9) {
-                if (data[x][y] > 9) {
-                    data[x][y] = 0
-                }
+        }
+        for (x in 0..9) for (y in 0..9) {
+            if (data[x][y] > 9) {
+                data[x][y] = 0
             }
         }
         return flashes
     }
-
-    fun part2() = 0
 }
 
 private data class P(val x: Int, val y: Int)
