@@ -48,6 +48,6 @@ class Day9(input: List<String>) {
         }
         return basin
     }
-}
 
-private data class Location(val row: Int, val col: Int)
+    private data class Location(val row: Int, val col: Int)
+}

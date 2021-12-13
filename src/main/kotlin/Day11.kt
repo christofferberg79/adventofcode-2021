@@ -30,13 +30,13 @@ class Day11(input: List<String>) {
         }
         return flashes
     }
+
+    private data class P(val x: Int, val y: Int)
+
+    private val P.adjacent: List<P>
+        get() = listOf(
+            P(x - 1, y - 1), P(x, y - 1), P(x + 1, y - 1),
+            P(x - 1, y), P(x + 1, y),
+            P(x - 1, y + 1), P(x, y + 1), P(x + 1, y + 1)
+        ).filter { p -> p.x in 0..9 && p.y in 0..9 }
 }
-
-private data class P(val x: Int, val y: Int)
-
-private val P.adjacent: List<P>
-    get() = listOf(
-        P(x - 1, y - 1), P(x, y - 1), P(x + 1, y - 1),
-        P(x - 1, y), P(x + 1, y),
-        P(x - 1, y + 1), P(x, y + 1), P(x + 1, y + 1)
-    ).filter { p -> p.x in 0..9 && p.y in 0..9 }

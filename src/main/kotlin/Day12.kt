@@ -15,27 +15,26 @@ class Day12(input: List<String>) {
         return findPaths(map, true).size
     }
 
-}
+    private fun findPaths(map: Map<String, List<String>>, pass: Boolean = false): List<List<String>> {
+        val completePaths = mutableListOf<List<String>>()
+        val incompletePaths = mutableListOf(listOf("start") to pass)
 
-private fun findPaths(map: Map<String, List<String>>, pass: Boolean = false): List<List<String>> {
-    val completePaths = mutableListOf<List<String>>()
-    val incompletePaths = mutableListOf(listOf("start") to pass)
-
-    while (incompletePaths.isNotEmpty()) {
-        val (path, hasSmallCavePass) = incompletePaths.removeFirst()
-        val nexts = map[path.last()] ?: error("There's no way out of cave ${path.last()}. How did we get in here?")
-        for (next in nexts) {
-            val needsSmallCavePass = next.first().isLowerCase() && next in path
-            if (hasSmallCavePass || !needsSmallCavePass) {
-                val newPath = path + next
-                if (next == "end") {
-                    completePaths += newPath
-                } else {
-                    incompletePaths += newPath to (hasSmallCavePass && !needsSmallCavePass)
+        while (incompletePaths.isNotEmpty()) {
+            val (path, hasSmallCavePass) = incompletePaths.removeFirst()
+            val nexts = map[path.last()] ?: error("There's no way out of cave ${path.last()}. How did we get in here?")
+            for (next in nexts) {
+                val needsSmallCavePass = next.first().isLowerCase() && next in path
+                if (hasSmallCavePass || !needsSmallCavePass) {
+                    val newPath = path + next
+                    if (next == "end") {
+                        completePaths += newPath
+                    } else {
+                        incompletePaths += newPath to (hasSmallCavePass && !needsSmallCavePass)
+                    }
                 }
             }
         }
-    }
 
-    return completePaths
+        return completePaths
+    }
 }

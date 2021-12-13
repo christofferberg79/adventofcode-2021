@@ -13,36 +13,36 @@ class Day2(commands: List<String>) {
 
         return finalPosition.horizontal * finalPosition.depth
     }
-}
 
-private data class Position(val horizontal: Int = 0, val depth: Int = 0, val aim: Int = 0)
+    private data class Position(val horizontal: Int = 0, val depth: Int = 0, val aim: Int = 0)
 
-private data class Command(val dir: String, val dist: Int)
+    private data class Command(val dir: String, val dist: Int)
 
-private fun Command(command: String) =
-    command.split(" ").let { (dir, dist) -> Command(dir, dist.toInt()) }
+    private fun Command(command: String) =
+        command.split(" ").let { (dir, dist) -> Command(dir, dist.toInt()) }
 
-private interface Interpreter {
-    fun run(command: Command, position: Position) = when (command.dir) {
-        "forward" -> position.forward(command.dist)
-        "down" -> position.down(command.dist)
-        "up" -> position.up(command.dist)
-        else -> error("Invalid command $command")
+    private interface Interpreter {
+        fun run(command: Command, position: Position) = when (command.dir) {
+            "forward" -> position.forward(command.dist)
+            "down" -> position.down(command.dist)
+            "up" -> position.up(command.dist)
+            else -> error("Invalid command $command")
+        }
+
+        fun Position.forward(dist: Int): Position
+        fun Position.down(dist: Int): Position
+        fun Position.up(dist: Int): Position
     }
 
-    fun Position.forward(dist: Int): Position
-    fun Position.down(dist: Int): Position
-    fun Position.up(dist: Int): Position
-}
+    private object Interpreter1 : Interpreter {
+        override fun Position.forward(dist: Int) = copy(horizontal = horizontal + dist)
+        override fun Position.down(dist: Int) = copy(depth = depth + dist)
+        override fun Position.up(dist: Int) = copy(depth = depth - dist)
+    }
 
-private object Interpreter1 : Interpreter {
-    override fun Position.forward(dist: Int) = copy(horizontal = horizontal + dist)
-    override fun Position.down(dist: Int) = copy(depth = depth + dist)
-    override fun Position.up(dist: Int) = copy(depth = depth - dist)
-}
-
-private object Interpreter2 : Interpreter {
-    override fun Position.forward(dist: Int) = copy(horizontal = horizontal + dist, depth = depth + aim * dist)
-    override fun Position.down(dist: Int) = copy(aim = aim + dist)
-    override fun Position.up(dist: Int) = copy(aim = aim - dist)
+    private object Interpreter2 : Interpreter {
+        override fun Position.forward(dist: Int) = copy(horizontal = horizontal + dist, depth = depth + aim * dist)
+        override fun Position.down(dist: Int) = copy(aim = aim + dist)
+        override fun Position.up(dist: Int) = copy(aim = aim - dist)
+    }
 }
