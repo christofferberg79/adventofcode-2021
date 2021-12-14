@@ -18,5 +18,27 @@ class Day14(input: List<String>) {
         return f.values.maxOrNull()!! - f.values.minOrNull()!!
     }
 
-    fun part2() = 0
+    fun part2(): Long {
+        var pairCount = template.zipWithNext { a, b -> "$a$b" }
+            .groupingBy { it }.eachCount()
+            .mapValues { (_, count) -> count.toLong() }
+
+        repeat(40) {
+            val newCount = mutableMapOf<String, Long>()
+            for ((pair, count) in pairCount) {
+                val insert = rules[pair] ?: error("No rule found for $it")
+                newCount.merge("${pair[0]}$insert", count, Long::plus)
+                newCount.merge("$insert${pair[1]}", count, Long::plus)
+                pairCount = newCount
+            }
+        }
+
+        val charCount = mutableMapOf<Char, Long>()
+        for ((pair, count) in pairCount) {
+            charCount.merge(pair[0], count, Long::plus)
+        }
+        charCount.merge(template.last(), 1, Long::plus)
+        return charCount.values.maxOrNull()!! - charCount.values.minOrNull()!!
+    }
+
 }
