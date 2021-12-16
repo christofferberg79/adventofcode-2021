@@ -37,6 +37,7 @@ fun main() {
     run(15, 1) { Day15().part1() }
     run(15, 2) { Day15().part2() }
     run(16, 1) { Day16().part1() }
+    run(16, 2) { Day16().part2() }
 }
 
 @OptIn(ExperimentalTime::class)
