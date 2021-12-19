@@ -1,5 +1,7 @@
 package cberg.aoc2021
 
+import kotlin.math.abs
+
 class Day19(private val input: List<String>) {
     fun part1(): Int {
         val scanners = parse(input)
@@ -14,15 +16,35 @@ class Day19(private val input: List<String>) {
                 val rhsInLhsSpace = findOverlap(lhs, rhs)
                 if (rhsInLhsSpace != null) {
                     iter.remove()
-                    lhss += rhsInLhsSpace
-                    allBeacons.addAll(rhsInLhsSpace)
+                    lhss += rhsInLhsSpace.first
+                    allBeacons.addAll(rhsInLhsSpace.first)
                 }
             }
         }
         return allBeacons.size
     }
 
-    fun part2() = 0
+    fun part2(): Int {
+        val scanners = parse(input)
+        val lhss = mutableListOf(scanners[0])
+        val rhss = scanners.drop(1).toMutableList()
+        val translations = mutableListOf<Vec3>()
+        while (lhss.isNotEmpty() && rhss.isNotEmpty()) {
+            val lhs = lhss.removeFirst()
+            val iter = rhss.listIterator()
+            while (iter.hasNext()) {
+                val rhs = iter.next()
+                val rhsInLhsSpace = findOverlap(lhs, rhs)
+                if (rhsInLhsSpace != null) {
+                    iter.remove()
+                    lhss += rhsInLhsSpace.first
+                    translations += rhsInLhsSpace.second
+                }
+            }
+        }
+
+        return translations.flatMap { t1 -> translations.map { t2 -> (t2 - t1).manhattanDistance } }.maxOrNull()!!
+    }
 
     private fun parse(input: List<String>): List<Set<Vec3>> {
         val scanners = mutableListOf<Set<Vec3>>()
@@ -39,7 +61,7 @@ class Day19(private val input: List<String>) {
         return scanners
     }
 
-    private fun findOverlap(scanner1: Set<Vec3>, scanner2: Set<Vec3>): Set<Vec3>? {
+    private fun findOverlap(scanner1: Set<Vec3>, scanner2: Set<Vec3>): Pair<Set<Vec3>, Vec3>? {
         for (rotation in rotations) {
             val scanner2Rotated = scanner2.map { vec -> rotation * vec }
             for (b1 in scanner1) {
@@ -47,7 +69,7 @@ class Day19(private val input: List<String>) {
                     val translation = b1 - b2
                     val count = scanner2Rotated.count { it + translation in scanner1 }
                     if (count >= 12) {
-                        return scanner2Rotated.map { it + translation }.toSet()
+                        return Pair(scanner2Rotated.map { it + translation }.toSet(), translation)
                     }
                 }
             }
@@ -61,6 +83,8 @@ data class Vec3(val x: Int, val y: Int, val z: Int)
 operator fun Vec3.plus(other: Vec3) = Vec3(x + other.x, y + other.y, z + other.z)
 operator fun Vec3.minus(other: Vec3) = Vec3(x - other.x, y - other.y, z - other.z)
 operator fun Vec3.unaryMinus() = Vec3(-x, -y, -z)
+
+private val Vec3.manhattanDistance get() = abs(x) + abs(y) + abs(z)
 
 data class Mat3(val v1: Vec3, val v2: Vec3, val v3: Vec3)
 

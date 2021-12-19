@@ -23,12 +23,12 @@ class Day19Test {
     @Test
     fun part2_Example() {
         val result = Day19(exampleInput).part2()
-        assertEquals(0, result)
+        assertEquals(3621, result)
     }
 
     @Test
     fun part2_RealInput() {
         val result = Day19(realInput).part2()
-        assertEquals(0, result)
+        assertEquals(9621, result)
     }
 }
