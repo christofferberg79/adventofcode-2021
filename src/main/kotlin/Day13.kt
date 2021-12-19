@@ -3,8 +3,6 @@ package cberg.aoc2021
 import kotlin.math.abs
 
 class Day13(private val input: List<String>) {
-    constructor() : this(Input("day13.txt").lines())
-
     fun part1(): Int {
         val (positions, foldLines) = parse(input)
         return positions.map(foldLines.first().transform).toSet().size

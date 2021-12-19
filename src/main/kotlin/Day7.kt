@@ -3,8 +3,6 @@ package cberg.aoc2021
 import kotlin.math.absoluteValue
 
 class Day7(input: String) {
-    constructor() : this(Input("day7.txt").oneLine())
-
     private val data = input.split(",").map { it.toInt() }.sorted()
 
     fun part1(): Int {

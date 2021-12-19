@@ -7,6 +7,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
 class Day16Test {
+    private val realInput = Input("day16.txt").oneLine()
+
     @Test
     fun testLiteral() {
         val p = Day16("D2FE28").packet
@@ -74,7 +76,7 @@ class Day16Test {
 
     @Test
     fun part1_RealInput() {
-        val result = Day16().part1()
+        val result = Day16(realInput).part1()
         assertEquals(891, result)
     }
 
@@ -128,7 +130,7 @@ class Day16Test {
 
     @Test
     fun part2_RealInput() {
-        val result = Day16().part2()
+        val result = Day16(realInput).part2()
         assertEquals(673042777597, result)
     }
 }

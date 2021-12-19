@@ -6,6 +6,8 @@ import kotlin.test.assertEquals
 class Day17Test {
     private val exampleInput = "target area: x=20..30, y=-10..-5"
 
+    private val realInput = Input("day17.txt").oneLine()
+
     @Test
     fun part1_Example() {
         val result = Day17(exampleInput).part1()
@@ -14,7 +16,7 @@ class Day17Test {
 
     @Test
     fun part1_RealInput() {
-        val result = Day17().part1()
+        val result = Day17(realInput).part1()
         assertEquals(5671, result)
     }
 
@@ -26,7 +28,7 @@ class Day17Test {
 
     @Test
     fun part2_RealInput() {
-        val result = Day17().part2()
+        val result = Day17(realInput).part2()
         assertEquals(4556, result)
     }
 }

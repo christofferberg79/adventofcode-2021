@@ -1,8 +1,6 @@
 package cberg.aoc2021
 
 class Day15(private val input: List<String>) {
-    constructor() : this(Input("day15.txt").lines())
-
     fun part1(): Int {
         val risk: (P) -> Int? = { p ->
             input.getOrNull(p.x)?.getOrNull(p.y)?.digitToInt()

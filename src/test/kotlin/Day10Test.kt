@@ -17,6 +17,8 @@ class Day10Test {
         "<{([{{}}[<[[[<>{}]]]>[]]"
     )
 
+    private val realInput = Input("day10.txt").lines()
+
     @Test
     fun part1_Example() {
         val result = Day10(exampleInput).part1()
@@ -25,7 +27,7 @@ class Day10Test {
 
     @Test
     fun part1_RealInput() {
-        val result = Day10().part1()
+        val result = Day10(realInput).part1()
         assertEquals(345441, result)
     }
 
@@ -37,7 +39,7 @@ class Day10Test {
 
     @Test
     fun part2_RealInput() {
-        val result = Day10().part2()
+        val result = Day10(realInput).part2()
         assertEquals(3235371166, result)
     }
 }

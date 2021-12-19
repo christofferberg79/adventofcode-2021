@@ -1,8 +1,6 @@
 package cberg.aoc2021
 
 class Day9(input: List<String>) {
-    constructor() : this(Input("day9.txt").lines())
-
     private val heightmap = input.map { s -> s.map { c -> c.digitToInt() } }
     private val maxRow = heightmap.lastIndex
     private val maxCol = heightmap.first().lastIndex

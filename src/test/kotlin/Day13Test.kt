@@ -28,6 +28,8 @@ class Day13Test {
         "fold along x=5"
     )
 
+    private val realInput = Input("day13.txt").lines()
+
     @Test
     fun part1_Example() {
         val result = Day13(exampleInput).part1()
@@ -36,7 +38,7 @@ class Day13Test {
 
     @Test
     fun part1_RealInput() {
-        val result = Day13().part1()
+        val result = Day13(realInput).part1()
         assertEquals(610, result)
     }
 
@@ -48,7 +50,7 @@ class Day13Test {
 
     @Test
     fun part2_RealInput() {
-        val result = Day13().part2()
+        val result = Day13(realInput).part2()
         assertEquals(95, result)
     }
 }

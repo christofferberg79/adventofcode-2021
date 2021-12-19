@@ -1,8 +1,6 @@
 package cberg.aoc2021
 
 class Day16(input: String) {
-    constructor() : this(Input("day16.txt").oneLine())
-
     val packet = parse(input)
 
     fun part1() = packet.asSequence().sumOf(Packet::version)

@@ -3,8 +3,6 @@ package cberg.aoc2021
 import kotlin.math.sign
 
 class Day5(input: List<String>) {
-    constructor() : this(Input("day5.txt").lines())
-
     private val lines = input.map { s -> Line(s) }
 
     fun part1() = lines

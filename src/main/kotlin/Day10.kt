@@ -1,8 +1,6 @@
 package cberg.aoc2021
 
 class Day10(private val input: List<String>) {
-    constructor() : this(Input("day10.txt").lines())
-
     fun part1() = input.sumOf { line ->
         errorScore(line)
     }

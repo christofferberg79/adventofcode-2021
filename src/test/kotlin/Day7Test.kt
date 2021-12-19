@@ -6,6 +6,7 @@ import kotlin.test.assertEquals
 class Day7Test {
     private val exampleInput = "16,1,2,0,4,2,7,1,2,14"
 
+    private val realInput = Input("day7.txt").oneLine()
 
     @Test
     fun part1_Example() {
@@ -15,7 +16,7 @@ class Day7Test {
 
     @Test
     fun part1_RealInput() {
-        val result = Day7().part1()
+        val result = Day7(realInput).part1()
         assertEquals(343468, result)
     }
 
@@ -27,7 +28,7 @@ class Day7Test {
 
     @Test
     fun part2_RealInput() {
-        val result = Day7().part2()
+        val result = Day7(realInput).part2()
         assertEquals(96086265, result)
     }
 }

@@ -1,8 +1,6 @@
 package cberg.aoc2021
 
 class Day4(input: List<String>) {
-    constructor() : this(Input("day4.txt").lines())
-
     private val numbers = parseNumbers(input)
     private val boards = parseBoards(input)
 

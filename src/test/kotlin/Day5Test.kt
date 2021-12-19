@@ -17,6 +17,8 @@ class Day5Test {
         "5,5 -> 8,2"
     )
 
+    private val realInput = Input("day5.txt").lines()
+
     @Test
     fun part1_Example() {
         val result = Day5(exampleInput).part1()
@@ -25,7 +27,7 @@ class Day5Test {
 
     @Test
     fun part1_RealInput() {
-        val result = Day5().part1()
+        val result = Day5(realInput).part1()
         assertEquals(6397, result)
     }
 
@@ -37,7 +39,7 @@ class Day5Test {
 
     @Test
     fun part2_RealInput() {
-        val result = Day5().part2()
+        val result = Day5(realInput).part2()
         assertEquals(22335, result)
     }
 }

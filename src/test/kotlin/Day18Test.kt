@@ -17,6 +17,8 @@ class Day18Test {
         "[[[[5,2],5],[8,[3,7]]],[[5,[7,5]],[4,4]]]"
     )
 
+    private val realInput = Input("day18.txt").lines()
+
     @Test
     fun part1_Example() {
         val result = Day18(exampleInput).part1()
@@ -25,7 +27,7 @@ class Day18Test {
 
     @Test
     fun part1_RealInput() {
-        val result = Day18().part1()
+        val result = Day18(realInput).part1()
         assertEquals(4347, result)
     }
 
@@ -37,7 +39,7 @@ class Day18Test {
 
     @Test
     fun part2_RealInput() {
-        val result = Day18().part2()
+        val result = Day18(realInput).part2()
         assertEquals(4721, result)
     }
 }

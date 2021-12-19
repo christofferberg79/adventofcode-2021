@@ -1,8 +1,6 @@
 package cberg.aoc2021
 
 class Day11(input: List<String>) {
-    constructor() : this(Input("day11.txt").lines())
-
     private val data = input.map { line -> line.map { it.digitToInt() }.toMutableList() }
 
     fun part1() = (1..100).sumOf { step() }

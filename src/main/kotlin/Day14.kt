@@ -1,8 +1,6 @@
 package cberg.aoc2021
 
 class Day14(input: List<String>) {
-    constructor() : this(Input("day14.txt").lines())
-
     private val template = input.first()
     private val rules = input.drop(2).map { it.split(" -> ") }
         .associate { (pair, insert) -> pair to insert.single() }

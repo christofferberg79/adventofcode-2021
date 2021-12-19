@@ -1,8 +1,6 @@
 package cberg.aoc2021
 
 class Day6(input: String) {
-    constructor() : this(Input("day6.txt").oneLine())
-
     private val state = input.split(",").map { it.toInt() }
 
     fun part1(days: Int) = solve(days).toInt()

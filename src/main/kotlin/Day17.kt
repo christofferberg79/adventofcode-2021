@@ -1,8 +1,6 @@
 package cberg.aoc2021
 
 class Day17(input: String) {
-    constructor() : this(Input("day17.txt").oneLine())
-
     private val xRange: IntRange
     private val yRange: IntRange
 

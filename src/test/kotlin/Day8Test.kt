@@ -17,6 +17,8 @@ class Day8Test {
         "gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce"
     )
 
+    private val realInput = Input("day8.txt").lines()
+
     @Test
     fun part1_Example() {
         val result = Day8(exampleInput).part1()
@@ -25,7 +27,7 @@ class Day8Test {
 
     @Test
     fun part1_RealInput() {
-        val result = Day8().part1()
+        val result = Day8(realInput).part1()
         assertEquals(255, result)
     }
 
@@ -37,7 +39,7 @@ class Day8Test {
 
     @Test
     fun part2_RealInput() {
-        val result = Day8().part2()
+        val result = Day8(realInput).part2()
         assertEquals(982158, result)
     }
 }

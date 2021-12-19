@@ -1,8 +1,6 @@
 package cberg.aoc2021
 
 class Day3(private val report: List<String>) {
-    constructor() : this(Input("day3.txt").lines())
-
     init {
         require(report.isNotEmpty())
         require(report.all { line -> line.length == report.first().length })

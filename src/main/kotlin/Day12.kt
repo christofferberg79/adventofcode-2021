@@ -1,8 +1,6 @@
 package cberg.aoc2021
 
 class Day12(input: List<String>) {
-    constructor() : this(Input("day12.txt").lines())
-
     private val map = input.flatMap { it.split("-").let { (from, to) -> listOf(from to to, to to from) } }
         .filter { (_, to) -> to != "start" }
         .groupBy(keySelector = { (from, _) -> from }, valueTransform = { (_, to) -> to })

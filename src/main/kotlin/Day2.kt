@@ -1,8 +1,6 @@
 package cberg.aoc2021
 
 class Day2(commands: List<String>) {
-    constructor() : this(Input("day2.txt").lines())
-
     private val commands = commands.map { Command(it) }
 
     fun part1() = solve(Interpreter1)
