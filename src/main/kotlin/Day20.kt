@@ -10,8 +10,12 @@ class Day20(input: List<String>) {
         check(algorithm.length == 512)
     }
 
-    fun part1() = generateSequence(original) { image -> enhance(image) }
-        .elementAt(2).let { image ->
+    fun part1() = solve(2)
+
+    fun part2() = solve(50)
+
+    private fun solve(enhancements: Int) = generateSequence(original) { image -> enhance(image) }
+        .elementAt(enhancements).let { image ->
             check(image.default == '.')
             image.pixels.count { (_, c) -> c == '#' }
         }
@@ -37,8 +41,6 @@ class Day20(input: List<String>) {
         }.joinToString("").toInt(2)
         return algorithm[index]
     }
-
-    fun part2() = 0
 
     class Image(val pixels: Map<Pixel, Char>, val default: Char = '.')
     data class Pixel(val x: Int, val y: Int)
