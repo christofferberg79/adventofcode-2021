@@ -1,63 +1,105 @@
 package cberg.aoc2021
 
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.sign
 
-class Day23(input: List<String>) {
+class Day23(private val input: List<String>) {
 
-    private val startState = parse(input)
+    fun part1() = getBestSolution(parse(input), 3)
 
-    private val targetState = mapOf(
-        Pos(3, 2) to 'A', Pos(3, 3) to 'A',
-        Pos(5, 2) to 'B', Pos(5, 3) to 'B',
-        Pos(7, 2) to 'C', Pos(7, 3) to 'C',
-        Pos(9, 2) to 'D', Pos(9, 3) to 'D'
-    )
+    fun part2(): Int {
+        val diagram = input.subList(0, 3) + "  #D#C#B#A#" + "  #D#B#A#C#" + input.subList(3, 5)
+        return getBestSolution(parse(diagram), 5)
+    }
 
-    fun part1() = getBestSolution(startState, targetState)
-
-    private data class Node(val state: Map<Pos, Char>, val dist: Int) {
+    private data class Node(val state: Map<Pos, Char>, val dist: Int, val maxY: Int) {
         fun possibleNextStates(): List<Node> {
             return possibleMoves().map { (from, to, d) ->
                 val newState = state.mapKeys { (p, _) -> if (p == from) to else p }
                 val newDist = dist + d
-                Node(newState, newDist)
+                Node(newState, newDist, maxY)
             }
         }
 
-        private fun possibleMoves() = state.flatMap { (p, c) -> possibleMoves(p, c) }
+        private fun possibleMoves(): List<Move> {
+            firstRoomToRoomOrNull()?.let { move -> return listOf(move) }
+            firstHallwayToRoomOrNull()?.let { move -> return listOf(move) }
+            return roomToHallway()
+        }
 
-        private fun possibleMoves(pos: Pos, c: Char): List<Move> {
-            return buildList {
-                if (pos.isInHallway()) {
-                    val roomBottom = Pos(roomX(c), 3)
-                    val roomTop = Pos(roomX(c), 2)
-                    if (canMove(from = pos, to = roomBottom)) {
-                        add(Move(from = pos, to = roomBottom, dist(pos, roomBottom, c)))
-                    } else if (state[roomBottom] == c && canMove(from = pos, to = roomTop)) {
-                        add(Move(from = pos, to = roomTop, dist(pos, roomTop, c)))
+        private fun firstRoomToRoomOrNull(): Move? {
+            for (x in (3..9 step 2)) {
+                inner@ for (y in 2..maxY) {
+                    val c = state[Pos(x, y)] ?: continue@inner
+                    if (roomX(c) == x) break@inner
+                    val to = findRoomTarget(c) ?: break@inner
+                    val from = Pos(x, y)
+                    if (hallwayIsClear(from.x, to.x)) {
+                        return Move(from, to, dist(from, to, c))
                     }
-                } else if (pos.x != roomX(c) || pos.y == 2 && state[pos.copy(y = 3)] != c) {
-                    addAll(listOf(1, 2, 4, 6, 8, 10, 11).map { x -> Pos(x, 1) }
-                        .filter { to -> canMove(from = pos, to) }
-                        .map { to -> Move(from = pos, to, dist(from = pos, to, c)) })
                 }
             }
+            return null
         }
 
-        private fun dist(from: Pos, to: Pos, c: Char): Int {
-            val md = abs(from.x - to.x) + abs(from.y - to.y)
-            return md * when (c) {
-                'A' -> 1
-                'B' -> 10
-                'C' -> 100
-                'D' -> 1000
-                else -> error("Invalid char $c")
+        private fun hallwayIsClear(fromX: Int, toX: Int) =
+            (min(fromX, toX)..max(fromX, toX)).none { x -> Pos(x, 1) in state }
+
+        private fun findRoomTarget(c: Char): Pos? {
+            val x = roomX(c)
+            for (y in maxY downTo 2) {
+                val pos = Pos(x, y)
+                val cAtPos = state[pos] ?: return pos
+                if (cAtPos != c) return null
             }
+            return null
+        }
+
+        private fun firstHallwayToRoomOrNull(): Move? {
+            for (x in 1..11) {
+                val c = state[Pos(x, 1)] ?: continue
+                val to = findRoomTarget(c) ?: continue
+                val from = Pos(x, 1)
+                if (hallwayIsClear(from.x + (to.x - from.x).sign, to.x)) {
+                    return Move(from, to, dist(from, to, c))
+                }
+            }
+            return null
+        }
+
+        private fun roomToHallway(): List<Move> {
+            return (3..9 step 2).flatMap { x ->
+                for (y in 2..maxY) {
+                    val from = Pos(x, y)
+                    val c = state[from] ?: continue
+                    return@flatMap if (roomX(c) == x && (y + 1..maxY).all { y1 -> state[Pos(x, y1)] == c }) {
+                        emptyList()
+                    } else {
+                        listOf(1, 2, 4, 6, 8, 10, 11)
+                            .map { toX -> Pos(toX, 1) }
+                            .filter { to -> hallwayIsClear(from.x, to.x) }
+                            .map { to -> Move(from, to, dist(from, to, c)) }
+                    }
+                }
+                emptyList()
+            }
+        }
+
+        private fun dist(from: Pos, to: Pos, c: Char) =
+            ((from.y - 1) + abs(to.x - from.x) + (to.y - 1)) * dist(c)
+
+        private fun dist(c: Char) = when (c) {
+            'A' -> 1
+            'B' -> 10
+            'C' -> 100
+            'D' -> 1000
+            else -> error("Invalid char $c")
         }
 
         private data class Move(val from: Pos, val to: Pos, val dist: Int)
 
-        private fun Pos.isInHallway() = y == 1
         private fun roomX(c: Char) = when (c) {
             'A' -> 3
             'B' -> 5
@@ -66,62 +108,24 @@ class Day23(input: List<String>) {
             else -> error("invalid char $c")
         }
 
-        private fun canMove(from: Pos, to: Pos): Boolean {
-            check(from.isInHallway() xor to.isInHallway())
-            if (to in state) {
-                return false
-            }
-            if (from.isInHallway()) {
-                if (from.x < to.x) {
-                    if ((from.x + 1..to.x).any { x -> Pos(x, 1) in state }) {
-                        return false
-                    }
-                } else if (from.x > to.x) {
-                    if ((from.x - 1 downTo to.x).any { x -> Pos(x, 1) in state }) {
-                        return false
-                    }
-                } else {
-                    error("from.x and to.x should not be equal")
-                }
-                if (to.y == 3 && to.copy(y = 2) in state) {
-                    return false
-                }
-                return true
-            } else if (to.isInHallway()) {
-                if (from.y == 3 && from.copy(y = 2) in state) {
-                    return false
-                }
-                if (from.x < to.x) {
-                    if ((from.x..to.x).any { x -> Pos(x, 1) in state }) {
-                        return false
-                    }
-                } else if (from.x > to.x) {
-                    if ((from.x downTo to.x).any { x -> Pos(x, 1) in state }) {
-                        return false
-                    }
-                } else {
-                    error("from.x and to.x should not be equal")
-                }
-                return true
-            } else {
-                error("from or to should be in the hallway")
-            }
+        fun isTargetState() = state.all { (p, c) ->
+            p.y > 1 && p.x == roomX(c)
         }
     }
 
-    private fun getBestSolution(startState: Map<Pos, Char>, targetState: Map<Pos, Char>): Int {
+    private fun getBestSolution(startState: Map<Pos, Char>, maxY: Int): Int {
         val dist = mutableMapOf(startState to 0).withDefault { Int.MAX_VALUE }
-        val todo = mutableSetOf(Node(startState, 0))
+        val todo = mutableSetOf(Node(startState, 0, maxY))
         while (todo.isNotEmpty()) {
             val node = todo.minByOrNull { it.dist }!!
-            if (node.state == targetState) {
+            if (node.isTargetState()) {
                 return node.dist
             }
             todo.remove(node)
             for (o in node.possibleNextStates()) {
                 if (o.dist < dist.getValue(o.state)) {
                     dist[o.state] = o.dist
-                    todo += Node(o.state, o.dist)
+                    todo += Node(o.state, o.dist, maxY)
                 }
             }
         }
@@ -129,13 +133,10 @@ class Day23(input: List<String>) {
     }
 
     private fun parse(input: List<String>): Map<Pos, Char> {
-        return listOf(
-            Pos(3, 2), Pos(3, 3), Pos(5, 2), Pos(5, 3),
-            Pos(7, 2), Pos(7, 3), Pos(9, 2), Pos(9, 3)
-        ).associateWith { p -> input[p.y][p.x] }
+        return input.flatMapIndexed { y: Int, line: String ->
+            line.mapIndexedNotNull { x, c -> if (c in 'A'..'D') Pos(x, y) to c else null }
+        }.toMap()
     }
-
-    fun part2() = 0
 
     data class Pos(val x: Int, val y: Int)
 }
