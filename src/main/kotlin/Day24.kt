@@ -2,14 +2,18 @@ package cberg.aoc2021
 
 class Day24 {
 
-    fun part1(): String {
-        for (n0 in 9 downTo 1) {
+    fun part1() = solve(9 downTo 1)
+
+    fun part2() = solve(1..9)
+
+    private fun solve(digits: IntProgression): String {
+        for (n0 in digits) {
             val z0 = n0 + 10L
-            for (n1 in 9 downTo 1) {
+            for (n1 in digits) {
                 val z1 = z0 * 26 + n1 + 16
-                for (n2 in 9 downTo 1) {
+                for (n2 in digits) {
                     val z2 = z1 * 26 + n2
-                    for (n3 in 9 downTo 1) {
+                    for (n3 in digits) {
                         val z3 = z2 * 26 + n3 + 13
                         val n4 = z3 % 26 - 14
                         if (n4 in 1..9) {
@@ -17,17 +21,17 @@ class Day24 {
                             val n5 = z4 % 26 - 4
                             if (n5 in 1..9) {
                                 val z5 = z4 / 26
-                                for (n6 in 9 downTo 1) {
+                                for (n6 in digits) {
                                     val z6 = z5 * 26 + n6 + 11
                                     val n7 = z6 % 26 - 3
                                     if (n7 in 1..9) {
                                         val z7 = z6 / 26
-                                        for (n8 in 9 downTo 1) {
+                                        for (n8 in digits) {
                                             val z8 = z7 * 26 + n8 + 16
                                             val n9 = z8 % 26 - 12
                                             if (n9 in 1..9) {
                                                 val z9 = z8 / 26
-                                                for (n10 in 9 downTo 1) {
+                                                for (n10 in digits) {
                                                     val z10 = z9 * 26 + n10 + 15
                                                     val n11 = z10 % 26 - 12
                                                     if (n11 in 1..9) {
@@ -57,8 +61,6 @@ class Day24 {
         }
         error("no solution found")
     }
-
-    fun part2() = 0
 
     class Alu(private val instructions: List<String>) {
         constructor(vararg instructions: String) : this(instructions.toList())

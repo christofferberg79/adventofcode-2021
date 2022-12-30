@@ -228,6 +228,6 @@ class Day24Test {
     @Test
     fun part2_RealInput() {
         val result = Day24().part2()
-        assertEquals(0, result)
+        assertEquals("31521119151421", result)
     }
 }
